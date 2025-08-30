@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpicyIP - Tranh Nghệ Thuật Độc Quyền</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Page Navigation */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b 0%, #ee5a24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo::before {
+            content: '🌶️';
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .nav-links a:hover {
+            color: #667eea;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #667eea;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .back-button {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .back-button:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 100px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="white" opacity="0.1"/><circle cx="80" cy="40" r="0.5" fill="white" opacity="0.1"/><circle cx="40" cy="80" r="1.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease 0.6s both;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        /* Featured Section */
+        .featured {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+        
+        .art-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .art-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .art-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        
+        .art-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            position: relative;
+        }
+        
+        .art-image::after {
+            content: '🎨';
+        }
+        
+        .art-info {
+            padding: 1.5rem;
+        }
+        
+        .art-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .art-artist {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .art-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .copyright-badge {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* Art Detail Page */
+        .art-detail {
+            margin-top: 80px;
+            padding: 50px 0;
+            min-height: 100vh;
+            background: white;
+        }
+
+        .art-detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .art-detail-image {
+            width: 100%;
+            height: 500px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .art-detail-info {
+            padding: 2rem 0;
+        }
+
+        .art-detail-title {
+            font-size: 3rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .art-detail-price {
+            font-size: 2rem;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-card h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .info-card p {
+            color: #666;
+            margin: 0.3rem 0;
+        }
+
+        .description-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .description-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .copyright-section-detail {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .copyright-section-detail h3 {
+            margin-bottom: 1rem;
+        }
+
+        .copyright-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .copyright-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .copyright-list li:last-child {
+            border-bottom: none;
+        }
+
+        .copyright-list li::before {
+            content: '✓';
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .purchase-section {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+
+        .purchase-button {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem;
+        }
+
+        .purchase-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .contact-button {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem;
+        }
+
+        .contact-button:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        /* Copyright Section */
+        .copyright-section {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+        
+        .copyright-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .copyright-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .copyright-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .copyright-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .copyright-card h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .copyright-card p {
+            color: #666;
+        }
+        
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+        
+        .footer-section p, .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            line-height: 1.8;
+            cursor: pointer;
+        }
+        
+        .footer-section a:hover {
+            color: #667eea;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .art-detail-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .art-detail-title {
+                font-size: 2rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo" onclick="showPage('home')">SpicyIP</div>
+            <ul class="nav-links">
+                <li><a onclick="showPage('home')">Trang chủ</a></li>
+                <li><a onclick="scrollToSection('featured')">Tranh nổi bật</a></li>
+                <li><a onclick="scrollToSection('copyright')">Bảo vệ bản quyền</a></li>
+                <li><a onclick="scrollToSection('contact')">Liên hệ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Tranh Nghệ Thuật Độc Quyền</h1>
+                    <p>Khám phá bộ sưu tập tranh nghệ thuật được bảo vệ bản quyền với chất lượng cao nhất</p>
+                    <a class="cta-button" onclick="scrollToSection('featured')">Khám phá ngay</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="featured" class="featured">
+            <div class="container">
+                <h2 class="section-title">Tranh Nổi Bật</h2>
+                <div class="art-grid">
+                    <div class="art-card" onclick="showArtDetail('art1')">
+                        <div class="art-image" style="background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 100%);"></div>
+                        <div class="art-info">
+                            <h3 class="art-title">Mặt trời rực rỡ</h3>
+                            <p class="art-artist">Họa sĩ: Nguyễn Văn A</p>
+                            <p class="art-price">2.500.000 VNĐ</p>
+                            <span class="copyright-badge">✓ Bảo vệ bản quyền</span>
+                        </div>
+                    </div>
+                    
+                    <div class="art-card" onclick="showArtDetail('art2')">
+                        <div class="art-image" style="background: linear-gradient(45deg, #a18cd1 0%, #fbc2eb 100%);"></div>
+                        <div class="art-info">
+                            <h3 class="art-title">Đêm thanh bình</h3>
+                            <p class="art-artist">Họa sĩ: Trần Thị B</p>
+                            <p class="art-price">3.200.000 VNĐ</p>
+                            <span class="copyright-badge">✓ Bảo vệ bản quyền</span>
+                        </div>
+                    </div>
+                    
+                    <div class="art-card" onclick="showArtDetail('art3')">
+                        <div class="art-image" style="background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);"></div>
+                        <div class="art-info">
+                            <h3 class="art-title">Sóng biển</h3>
+                            <p class="art-artist">Họa sĩ: Lê Văn C</p>
+                            <p class="art-price">1.800.000 VNĐ</p>
+                            <span class="copyright-badge">✓ Bảo vệ bản quyền</span>
+                        </div>
+                    </div>
+
+                    <div class="art-card" onclick="showArtDetail('art4')">
+                        <div class="art-image" style="background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);"></div>
+                        <div class="art-info">
+                            <h3 class="art-title">Hoa sen tím</h3>
+                            <p class="art-artist">Họa sĩ: Phạm Thị D</p>
+                            <p class="art-price">2.800.000 VNĐ</p>
+                            <span class="copyright-badge">✓ Bảo vệ bản quyền</span>
+                        </div>
+                    </div>
+
+                    <div class="art-card" onclick="showArtDetail('art5')">
+                        <div class="art-image" style="background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);"></div>
+                        <div class="art-info">
+                            <h3 class="art-title">Rừng xanh</h3>
+                            <p class="art-artist">Họa sĩ: Hoàng Văn E</p>
+                            <p class="art-price">3.500.000 VNĐ</p>
+                            <span class="copyright-badge">✓ Bảo vệ bản quyền</span>
+                        </div>
+                    </div>
+
+                    <div class="art-card" onclick="showArtDetail('art6')">
+                        <div class="art-image" style="background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);"></div>
+                        <div class="art-info">
+                            <h3 class="art-title">Hoàng hôn</h3>
+                            <p class="art-artist">Họa sĩ: Vũ Thị F</p>
+                            <p class="art-price">2.200.000 VNĐ</p>
+                            <span class="copyright-badge">✓ Bảo vệ bản quyền</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="copyright" class="copyright-section">
+            <div class="container">
+                <h2 class="section-title">Chính Sách Bảo Vệ Bản Quyền</h2>
+                <div class="copyright-grid">
+                    <div class="copyright-card">
+                        <div class="copyright-icon">🛡️</div>
+                        <h3>Bảo vệ tác phẩm</h3>
+                        <p>Mỗi tác phẩm đều được đăng ký bản quyền và có chứng nhận pháp lý đầy đủ</p>
+                    </div>
+                    
+                    <div class="copyright-card">
+                        <div class="copyright-icon">📜</div>
+                        <h3>Giấy chứng nhận</h3>
+                        <p>Khách hàng nhận được giấy chứng nhận nguồn gốc và bản quyền khi mua tranh</p>
+                    </div>
+                    
+                    <div class="copyright-card">
+                        <div class="copyright-icon">⚖️</div>
+                        <h3>Pháp lý minh bạch</h3>
+                        <p>Cam kết minh bạch về quyền sở hữu và không vi phạm bản quyền của bên thứ ba</p>
+                    </div>
+                    
+                    <div class="copyright-card">
+                        <div class="copyright-icon">🔒</div>
+                        <h3>Bảo mật thông tin</h3>
+                        <p>Thông tin khách hàng và giao dịch được bảo mật tuyệt đối</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contact">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>Liên hệ</h3>
+                        <p>📞 Hotline: 0123-456-789</p>
+                        <p><strong>Email:</strong> info@spicyip.vn</p>
+                        <p>📍 Địa chỉ: 123 Đường Nghệ Thuật, Q.1, TP.HCM</p>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Dịch vụ</h3>
+                        <p><a>Mua tranh trực tuyến</a></p>
+                        <p><a>Tư vấn nghệ thuật</a></p>
+                        <p><a>Đăng ký bản quyền</a></p>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Chính sách</h3>
+                        <p><a>Bảo vệ bản quyền</a></p>
+                        <p><a>Điều khoản sử dụng</a></p>
+                        <p><a>Chính sách bảo mật</a></p>
+                    </div>
+                </div>
+                <p>&copy; 2025 SpicyIP. Bảo lưu mọi quyền. Được bảo vệ bởi luật bản quyền.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Art Detail Pages -->
+    <div id="art1" class="page">
+        <div class="art-detail">
+            <div class="container">
+                <button class="back-button" onclick="showPage('home')">← Quay lại trang chủ</button>
+                
+                <div class="art-detail-container">
+                    <div class="art-detail-image" style="background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 100%);">
+                        🎨
+                    </div>
+                    
+                    <div class="art-detail-info">
+                        <h1 class="art-detail-title">Mặt trời rực rỡ</h1>
+                        <div class="art-detail-price">2.500.000 VNĐ</div>
+                        <span class="copyright-badge" style="font-size: 1rem; padding: 8px 15px;">✓ Đã xác thực bản quyền</span>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>🎨 Thông tin tác phẩm</h4>
+                        <p><strong>Tên:</strong> Mặt trời rực rỡ</p>
+                        <p><strong>Kích thước:</strong> 60cm x 80cm</p>
+                        <p><strong>Chất liệu:</strong> Sơn dầu trên canvas</p>
+                        <p><strong>Phong cách:</strong> Ấn tượng hiện đại</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>👨‍🎨 Thông tin họa sĩ</h4>
+                        <p><strong>Họ tên:</strong> Nguyễn Văn A</p>
+                        <p><strong>Sinh năm:</strong> 1985</p>
+                        <p><strong>Quê quán:</strong> Hà Nội</p>
+                        <p><strong>Chuyên môn:</strong> Hội họa đương đại</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>📅 Thời gian</h4>
+                        <p><strong>Ngày bắt đầu vẽ:</strong> 15/03/2024</p>
+                        <p><strong>Ngày hoàn thành:</strong> 28/03/2024</p>
+                        <p><strong>Thời gian sáng tác:</strong> 13 ngày</p>
+                        <p><strong>Ngày tạo hồ sơ:</strong> 02/04/2024</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>🏛️ Chủ sở hữu hiện tại</h4>
+                        <p><strong>Tên:</strong> Gallery Art Vietnam</p>
+                        <p><strong>Địa chỉ:</strong> 123 Đường Nghệ Thuật, Q.1, TP.HCM</p>
+                        <p><strong>Ngày sở hữu:</strong> 05/04/2024</p>
+                        <p><strong>Mã số:</strong> GAV-2024-001</p>
+                    </div>
+                </div>
+
+                <div class="description-section">
+                    <h3>📝 Mô tả tác phẩm</h3>
+                    <p>Tác phẩm "Mặt trời rực rỡ" được họa sĩ Nguyễn Văn A sáng tác trong khoảng thời gian tháng 3 năm 2024, lấy cảm hứng từ những buổi bình minh trên vịnh Hạ Long. Bức tranh thể hiện sự ấm áp và năng lượng tích cực của ánh nắng ban mai, với những gam màu cam, vàng rực rỡ hòa quyện cùng nét vẽ tinh tế của phong cách ấn tượng hiện đại.</p>
+                    <p>Tác phẩm được thực hiện trên canvas cao cấp với sơn dầu chất lượng, đảm bảo độ bền màu và giá trị lưu giữ lâu dài. Đây là tác phẩm độc bản, không có bản sao.</p>
+                </div>
+
+                <div class="copyright-section-detail">
+                    <h3>🛡️ Thông tin bản quyền & Pháp lý</h3>
+                    <ul class="copyright-list">
+                        <li>Tác phẩm gốc được xác thực bởi chuyên gia nghệ thuật</li>
+                        <li>Có giấy chứng nhận nguồn gốc từ họa sĩ</li>
+                        <li>Đã đăng ký bản quyền tại Cục Bản quyền Tác giả</li>
+                        <li>Bảo hiểm tác phẩm nghệ thuật
